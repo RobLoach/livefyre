@@ -54,6 +54,14 @@ function livefyre_permission() {
       'title' => t('Add Livefyre HTML'),
       'description' => t('Allow a user to add "extra" html, js and/or css which doesn\'t have to originate from Livefyre.'),
     ),
+    'access livefyre comments' => array(
+      'title' => t('Access Livefyre comments'),
+      'description' => t('Use Livefyre comments on the site.'),
+    ),
+    'bypass livefyre comments visibility settings' => array(
+      'title' => t('Bypass Livefyre comments visibility settings'),
+      'description' => t('Show Livefyre comment fields, regardless of the field settings.'),
+    ),
   );
 }
 
