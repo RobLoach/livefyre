@@ -1,9 +1,24 @@
 <?php
-
 /**
  * @file
  * Provides any required installation or upgrade path requirements.
  */
+
+/**
+ * Implements hook_field_schema().
+ */
+function livefyre_field_schema($field) {
+  $columns = array(
+    'value' => array(
+      'type' => 'int',
+      'not null' => FALSE,
+      'size' => 'tiny',
+    ),
+  );
+  return array(
+    'columns' => $columns,
+  );
+}
 
 /**
  * Implements hook_uninstall().
