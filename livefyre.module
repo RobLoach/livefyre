@@ -1,9 +1,19 @@
 <?php
-
 /**
  * @file
  * Display Livefyre comments.
  */
+
+/**
+ * Implements hook_help().
+ */
+function livefyre_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#livefyre':
+      return '<p>' . t('Implements Livefyre Comments 3') . '</p>';
+      break;
+  }
+}
 
 /**
  * Implements hook_menu().
