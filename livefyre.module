@@ -5,6 +5,16 @@
  */
 
 /**
+ * Define the zor library Livefyre will pull down from.
+ */
+define('LF_ZOR', 'http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js');
+
+/**
+ * Include the Livefyre API
+ */
+include_once 'livefyre-api/libs/php/Livefyre.php';
+
+/**
  * Implements hook_help().
  */
 function livefyre_help($path, $arg) {
