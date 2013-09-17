@@ -95,3 +95,65 @@ function livefyre_field_info() {
     ),
   );
 }
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function livefyre_field_formatter_info() {
+  return array(
+    'livefyre_full' => array(
+      'label' => t('Full'),
+      'description' => t('Shows the full comment stream'),
+      'field types' => array('livefyre'),
+    ),
+    'livefyre_comments_number' => array(
+      'label' => t('Comments number'),
+      'description' => t('Shows only the number of comments'),
+      'field types' => array('livefyre'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function livefyre_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Generate the article id from the current entity and entity ID. Use the
+  // entity's url instead of type:id because it will easier to handle in the
+  // block implementation.
+  $article_id = entity_uri($entity_type, $entity);
+  $article_id = $article_id['path'];
+
+  switch ($display['type']) {
+    case 'livefyre_full':
+      foreach ($items as $delta => $item) {
+        if ($item['value']) {
+          $element[$delta] = array(
+            '#theme' => 'livefyre_formatter_full',
+            '#entity' => $entity,
+            '#article_id' => $article_id,
+            '#widget_id' => "livefyre-entity-{$entity_type}-id-{$id}-field-{$field['id']}-{$delta}",
+            '#title' => isset($entity->title) ? $entity->title : drupal_get_title(),
+          );
+        }
+      }
+      break;
+
+    case 'livefyre_comments_number':
+      foreach ($items as $delta => $item) {
+        if ($item['value']) {
+          $element[$delta] = array(
+            '#theme' => 'livefyre_formatter_comments_number',
+            '#article_id' => $article_id,
+            '#site_id' => variable_get('livefyre_site_id'),
+          );
+        }
+      }
+      break;
+  }
+
+  return $element;
+}
