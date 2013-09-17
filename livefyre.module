@@ -242,3 +242,65 @@ function _livefyre_user_authentication() {
   // Add necessary javascript files and pass the token variable.
   drupal_add_js($js_settings, 'setting');
 }
+
+/**
+ * Checks that the current environment is enterprise.
+ * @return bool
+ */
+function livefyre_is_enterprise() {
+  return (variable_get('livefyre_network', 'livefyre.com') != 'livefyre.com');
+}
+
+/**
+ * Adds teh JS embed to the page.
+ *
+ * @param string $src
+ *   The delta letting us know we're in Livefyre Land.
+ */
+function livefyre_add_footer($src) {
+  // Check for Janrain implementation
+  $global_push = "if (typeof LivefyreDrupal == 'undefined') {
+      window.LivefyreDrupal = new Array();\n} LivefyreDrupal.push(lf_config);";
+  if (livefyre_is_enterprise()) {
+    $src = "var authDelegate = new fyre.conv.RemoteAuthDelegate();\n{$src}";
+  }
+  $src .= "\n" . $global_push;
+  if (variable_get('livefyre_jr_capture')) {
+    $src = "function livefyreJanrainInit(){\n" . $src . "}";
+  }
+  drupal_add_js('' . $src,
+    array(
+      'type' => 'inline',
+      'scope' => 'footer',
+      'weight' => -90,
+    )
+  );
+}
+
+/**
+ * Spits out the setup every page with Livefyre needs.
+ */
+function livefyre_page_setup() {
+  global $user;
+  // Build the Livefyre zor URL
+  $livefyre_zor = LF_ZOR;
+  $lf_network = variable_get('livefyre_network', 'livefyre.com');
+  if (variable_get('livefyre_environment') != 1) {
+    $livefyre_zor = "http://zor." . $lf_network . "/wjs/v3.0/javascripts/livefyre.js";
+  }
+
+  // Add the external javascript to the page
+  drupal_add_js($livefyre_zor,
+    array(
+      'type' => 'external',
+      'scope' => 'header',
+    )
+  );
+
+  // Add destination variable to js settings.
+  $js_settings = array(
+    'livefyre' => drupal_get_destination(),
+  );
+  $js_settings['livefyre']['uid'] = $user->uid;
+  drupal_add_js($js_settings, 'setting');
+}
