@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Display Livefyre comments.
+ *  Display Livefyre comments.
  */
 
 /**
@@ -75,6 +75,23 @@ function livefyre_block_info() {
     'livefyre_comments' => array(
       'info' => t('Livefyre Comments'),
       'cache' => DRUPAL_NO_CACHE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function livefyre_field_info() {
+  return array(
+    'livefyre' => array(
+      'label' => t('Livefyre'),
+      'description' => t('This field stores that the Livefyre comment is enabled or not.'),
+      'default_widget' => 'livefyre_checkbox',
+      'default_formatter' => 'livefyre_full',
+      'instance_settings' => array(
+        'livefyre_settings_hide' => 0,
+      ),
     ),
   );
 }
