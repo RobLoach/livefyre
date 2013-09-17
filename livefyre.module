@@ -29,16 +29,18 @@ function livefyre_help($path, $arg) {
  * Implements hook_menu().
  */
 function livefyre_menu() {
-  return array(
-    'admin/config/livefyre' => array(
-      'title' => 'Livefyre',
-      'description' => 'Configure livefyre comments',
-      'access arguments' => array('administer livefyre comments'),
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('livefyre_admin_settings_form'),
-      'file' => 'livefyre.admin.inc',
-    ),
+  $items = array();
+
+  $items['admin/config/livefyre'] = array(
+    'title' => 'Livefyre',
+    'description' => 'Configure livefyre comments',
+    'access arguments' => array('administer livefyre comments'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('livefyre_admin_settings_form'),
+    'file' => 'livefyre.admin.inc',
   );
+
+  return $items;
 }
 
 /**
