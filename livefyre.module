@@ -180,3 +180,65 @@ function theme_livefyre_formatter_full(&$variables) {
   // html data too for search engines.
   return $out;
 }
+
+/**
+ * Builds a Conversation object to get JS embed string.
+ *
+ * @param string $article_id
+ *   Unique article ID for the conversation being created.
+ * @return
+ *   The block information with Livefyre's conversation data added to it.
+ */
+function livefyre_build_conv($article_id, $title) {
+  global $base_url;
+
+  $site_id = variable_get('livefyre_site_id');
+  $site_key = variable_get('livefyre_site_key');
+  $source_url = $base_url . '/' . current_path();
+  $network = variable_get('livefyre_network', 'livefyre.com');
+  $network_key = variable_get('livefyre_network_key', NULL);
+
+  // Define Livefyre API variables
+  $domain = new Livefyre_Domain($network, $network_key);
+  $site = $domain->site($site_id, $site_key);
+  $article = $site->article($article_id, $source_url, $title);
+  $conv = $article->conversation();
+
+  if (livefyre_is_enterprise()) {
+    // Authenticate the user.
+    _livefyre_user_authentication();
+  }
+
+  return $conv;
+}
+
+/**
+ * Authenticate the currently logged in user to the livefyre widget.
+ */
+function _livefyre_user_authentication() {
+  global $user;
+
+  // Always add the javascript because the js will check the authentication but
+  // we need to run the login/logout delegate functions independently of the
+  // user is logged in or not.
+  drupal_add_js(drupal_get_path('module', 'livefyre') . '/livefyre.js', array('scope' => 'footer'));
+  // Return if the user is anonymus.
+  if ($user->uid == 0) {
+    return;
+  }
+
+  // Generate a user token for the authentication.
+  $network = variable_get('livefyre_network', 'livefyre.com');
+  $network_key = variable_get('livefyre_network_key', NULL);
+  $domain = new Livefyre_Domain($network, $network_key);
+  $token = $domain->user($user->uid, $user->name)->token();
+
+  $js_settings = array(
+    'livefyre' => array(
+      'userToken' => $token,
+    ),
+  );
+
+  // Add necessary javascript files and pass the token variable.
+  drupal_add_js($js_settings, 'setting');
+}
