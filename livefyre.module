@@ -240,6 +240,12 @@ function livefyre_theme($existing, $type, $theme, $path) {
         'title' => '',
       )
     ),
+    'livefyre_formatter_comments_number' => array(
+      'variables' => array(
+        'article_id' => '',
+        'site_id' => '',
+      )
+    ),
   );
 }
 
