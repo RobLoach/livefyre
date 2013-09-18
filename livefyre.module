@@ -287,6 +287,41 @@ function theme_livefyre_formatter_comments_number(&$variables) {
 }
 
 /**
+ * Gets the cached data with bootstrap API.
+ *
+ * @param $article_id
+ *   The id of the current request.
+ * @param string $prefix
+ *   The html wrapper prefix.
+ * @param string $suffix
+ *   The html wrapper suffix.
+ *
+ * @return string
+ *   The generated html code.
+ */
+function livefyre_get_bootstrapped_data($article_id, $prefix = '<div id="livefyre">', $suffix = '</div>') {
+  // Build the http request.
+  $encoded_article_id = base64_encode($article_id);
+  $network = variable_get('livefyre_network', 'livefyre.com');
+  $site_id = variable_get('livefyre_site_id');
+  $newtwork_url = "/{$network}/{$site_id}/{$encoded_article_id}/bootstrap.html";
+  $url = "http://bootstrap.{$network}/bs3" . $newtwork_url;
+  $options = array(
+    'method' => 'GET',
+  );
+
+  $res = drupal_http_request($url, $options);
+  // The cache exist. Bootstrap API doesn't return with the correct status, so
+  // the status code will 200 but the html data will contain the network url.
+  if ($res->code == 200 && !strstr($res->data, $newtwork_url)) {
+    return $prefix . $res->data . $suffix;
+  }
+  else {
+    return $prefix . $suffix;
+  }
+}
+
+/**
  * Builds a Conversation object to get JS embed string.
  *
  * @param string $article_id
