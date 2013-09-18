@@ -250,6 +250,37 @@ function livefyre_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_entity_info().
+ */
+function livefyre_entity_info() {
+  $return = array(
+    'livefyre_comment' => array(
+      'label' => t('Livefyre Comment'),
+      'controller class' => 'EntityAPIController',
+      'module' => 'livefyre',
+      'views controller class' => 'LivefyreEntityDefaultViewsController',
+      'base table' => 'livefyre_comments',
+      'fieldable' => FALSE,
+      'entity keys' => array(
+        'id' => 'lfcid',
+      ),
+      'bundles' => array(
+        'livefyre_comment' => array(
+          'label' => t('Livefyre Comment'),
+        ),
+      ),
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Livefyre Comment'),
+          'custom settings' => FALSE,
+        ),
+      ),
+    ),
+  );
+  return $return;
+}
+
+/**
  * Renders livefyre field's full formatter.
  */
 function theme_livefyre_formatter_full(&$variables) {
