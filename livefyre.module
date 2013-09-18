@@ -386,7 +386,7 @@ function livefyre_build_conv($article_id, $title) {
 
   if (livefyre_is_enterprise()) {
     // Authenticate the user.
-    _livefyre_user_authentication();
+    livefyre_user_authentication();
   }
 
   return $conv;
@@ -570,7 +570,7 @@ function livefyre_get_lfcid_from_lf_comment_id($lf_comment_id) {
 /**
  * Authenticate the currently logged in user to the livefyre widget.
  */
-function _livefyre_user_authentication() {
+function livefyre_user_authentication() {
   global $user;
 
   // Always add the javascript because the js will check the authentication but
