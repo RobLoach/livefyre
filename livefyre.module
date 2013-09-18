@@ -81,6 +81,22 @@ function livefyre_field_info() {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Hide cardinality settings and set it to 1 and also hide the required checkbox
+ * because it will be not used with the hide option.
+ */
+function livefyre_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#field']['type'] == 'livefyre') {
+    // Hide the cardinality setting on the field settings for Livefyre fields.
+    $form['field']['cardinality']['#default_value'] = 1;
+    $form['field']['#access'] = FALSE;
+    // Hide required field from the field settings form.
+    $form['instance']['required']['#access'] = FALSE;
+  }
+}
+
+/**
  * Implements hook_field_formatter_info().
  */
 function livefyre_field_formatter_info() {
