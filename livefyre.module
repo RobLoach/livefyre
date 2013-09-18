@@ -114,6 +114,16 @@ function livefyre_field_instance_settings_form($field, $instance) {
 }
 
 /**
+ * Implements hook_field_is_empty().
+ */
+function livefyre_field_is_empty($item, $field) {
+  if (empty($item['value']) && (string) $item['value'] !== '0') {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
  * Implements hook_field_formatter_info().
  */
 function livefyre_field_formatter_info() {
