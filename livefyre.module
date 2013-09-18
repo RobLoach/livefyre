@@ -31,12 +31,12 @@ function livefyre_help($path, $arg) {
 function livefyre_menu() {
   $items = array();
 
-  $items['admin/config/livefyre'] = array(
-    'title' => 'Livefyre',
-    'description' => 'Configure livefyre comments',
-    'access arguments' => array('administer livefyre comments'),
+  $items['admin/config/content/livefyre'] = array(
+    'title' => 'Livefyre Comments 3',
+    'description' => 'Livefyre Comments 3 Plugin for Drupal',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('livefyre_admin_settings_form'),
+    'page arguments' => array('livefyre_admin'),
+    'access arguments' => array('administer livefyre settings'),
     'file' => 'livefyre.admin.inc',
   );
 
