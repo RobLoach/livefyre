@@ -97,6 +97,23 @@ function livefyre_form_field_ui_field_edit_form_alter(&$form, &$form_state, $for
 }
 
 /**
+ * Implements hook_field_instance_settings_form().
+ */
+function livefyre_field_instance_settings_form($field, $instance) {
+  $settings = $instance['settings'];
+
+  $form['livefyre_settings_hide'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide Livefyre comment settings'),
+    '#description' => t('If you check this checkbox, content editors will not be able to modify the default settings on the content form.'),
+    '#default_value' => $settings['livefyre_settings_hide'],
+    '#weight' => 10,
+  );
+
+  return $form;
+}
+
+/**
  * Implements hook_field_formatter_info().
  */
 function livefyre_field_formatter_info() {
