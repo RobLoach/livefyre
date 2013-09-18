@@ -186,6 +186,18 @@ function livefyre_field_formatter_view($entity_type, $entity, $field, $instance,
 }
 
 /**
+ * Implements hook_field_widget_info().
+ */
+function livefyre_field_widget_info() {
+  return array(
+    'livefyre_checkbox' => array(
+      'label' => t('Checkbox'),
+      'field types' => array('livefyre'),
+    ),
+  );
+}
+
+/**
  * Implements hook_theme().
  */
 function livefyre_theme($existing, $type, $theme, $path) {
