@@ -209,6 +209,25 @@ function livefyre_field_access($op, $field, $entity_type, $entity, $account) {
 }
 
 /**
+ * Implements hook_field_widget_form().
+ */
+function livefyre_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  if ($instance['widget']['type'] == 'livefyre_checkbox') {
+    $value = isset($items[$delta]['value']) ? $items[$delta]['value'] : 1;
+    $element += array(
+      '#type' => 'checkbox',
+      '#default_value' => $value,
+    );
+    // If the form is hide from the user, check the bypass permission.
+    if ($instance['settings']['livefyre_settings_hide']) {
+      $element['#access'] = user_access('bypass livefyre comments visibility settings');
+    }
+  }
+
+  return array('value' => $element);
+}
+
+/**
  * Implements hook_theme().
  */
 function livefyre_theme($existing, $type, $theme, $path) {
