@@ -64,18 +64,6 @@ function livefyre_permission() {
 }
 
 /**
- * Implements hook_block_info().
- */
-function livefyre_block_info() {
-  return array(
-    'livefyre_comments' => array(
-      'info' => t('Livefyre Comments'),
-      'cache' => DRUPAL_NO_CACHE,
-    ),
-  );
-}
-
-/**
  * Implements hook_field_info().
  */
 function livefyre_field_info() {
