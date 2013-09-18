@@ -52,10 +52,6 @@ function livefyre_permission() {
       'title' => t('Administer Livefyre Comments'),
       'description' => t('Allow a user to administer Livefyre Comments.'),
     ),
-    'add livefyre html' => array(
-      'title' => t('Add Livefyre HTML'),
-      'description' => t('Allow a user to add "extra" html, js and/or css which doesn\'t have to originate from Livefyre.'),
-    ),
     'access livefyre comments' => array(
       'title' => t('Access Livefyre comments'),
       'description' => t('Use Livefyre comments on the site.'),
