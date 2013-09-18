@@ -198,6 +198,17 @@ function livefyre_field_widget_info() {
 }
 
 /**
+ * Implements hook_field_access().
+ */
+function livefyre_field_access($op, $field, $entity_type, $entity, $account) {
+  if ($field['type'] === "livefyre" && $op === "view") {
+    return user_access('access livefyre comments');
+  }
+
+  return TRUE;
+}
+
+/**
  * Implements hook_theme().
  */
 function livefyre_theme($existing, $type, $theme, $path) {
