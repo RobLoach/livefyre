@@ -64,6 +64,15 @@ function livefyre_permission() {
 }
 
 /**
+ * Implements hook_cron().
+ *
+ * Sync livefyre comment with the created entities.
+ */
+function livefyre_cron() {
+  livefyre_comment_sync();
+}
+
+/**
  * Implements hook_field_info().
  */
 function livefyre_field_info() {
