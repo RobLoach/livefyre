@@ -178,17 +178,17 @@ function livefyre_field_formatter_view($entity_type, $entity, $field, $instance,
       }
       break;
 
-      case 'livefyre_comments_number':
-        foreach ($items as $delta => $item) {
-          if ($item['value']) {
-            $element[$delta] = array(
-              '#theme' => 'livefyre_formatter_comments_number',
-              '#article_id' => $article_id,
-              '#site_id' => variable_get('livefyre_site_id'),
-            );
-          }
+    case 'livefyre_comments_number':
+      foreach ($items as $delta => $item) {
+        if ($item['value']) {
+          $element[$delta] = array(
+            '#theme' => 'livefyre_formatter_comments_number',
+            '#article_id' => $article_id,
+            '#site_id' => variable_get('livefyre_site_id'),
+          );
         }
-        break;
+      }
+      break;
   }
 
   return $element;
