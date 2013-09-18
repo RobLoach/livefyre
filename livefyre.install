@@ -136,15 +136,19 @@ function livefyre_schema() {
 
 /**
  * Implements hook_uninstall().
+ *
+ * Delete created variables.
  */
 function livefyre_uninstall() {
-  variable_del('livefyre_disabled');
-  variable_del('livefyre_acct_num');
-  variable_del('livefyre_supplied_js');
-  variable_del('livefyre_parent_div');
-  variable_del('livefyre_custom_instantiate_lf');
-  variable_del('livefyre_custom_script_snippet');
-  variable_del('livefyre_node_types');
-  variable_del('livefyre_location');
-  variable_del('livefyre_weight');
+  variable_del('livefyre_site_id');
+  variable_del('livefyre_site_key');
+  variable_del('livefyre_since_id');
+  variable_del('livefyre_network');
+  variable_del('livefyre_network_key');
+  variable_del('livefyre_auth_delegate');
+  variable_del('livefyre_conv_load_callback');
+  variable_del('livefyre_custom_css');
+  variable_del('livefyre_environment');
+  variable_del('livefyre_jr_capture');
+  variable_del('livefyre_sync_activity_number');
 }
