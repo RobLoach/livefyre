@@ -432,6 +432,32 @@ function livefyre_is_enterprise() {
 }
 
 /**
+ * Livefyre Views Controller class.
+ */
+class LivefyreEntityDefaultViewsController extends EntityDefaultViewsController {
+
+  /**
+   * Edit special fields to views_data().
+   */
+  public function views_data() {
+    $data = parent::views_data();
+
+    // Created field.
+    $data['livefyre_comments']['created']['field']['handler'] = 'views_handler_field_date';
+    $data['livefyre_comments']['created']['filter']['handler'] = 'views_handler_filter_date';
+    $data['livefyre_comments']['created']['argument']['handler'] = 'views_handler_argument_date';
+    $data['livefyre_comments']['created']['sort']['handler'] = 'views_handler_sort_date';
+    // Homepage field.
+    $data['livefyre_comments']['homepage']['field']['handler'] = 'views_handler_field_url';
+    // Published field.
+    $data['livefyre_comments']['published']['field']['handler'] = 'views_handler_field_boolean';
+    $data['livefyre_comments']['published']['filter']['handler'] = 'views_handler_filter_boolean_operator';
+
+    return $data;
+  }
+}
+
+/**
  * Adds teh JS embed to the page.
  *
  * @param string $src
