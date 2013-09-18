@@ -48,9 +48,9 @@ function livefyre_menu() {
  */
 function livefyre_permission() {
   return array(
-    'administer livefyre comments' => array(
-      'title' => t('Administer Livefyre Comments'),
-      'description' => t('Allow a user to administer Livefyre Comments.'),
+    'administer livefyre settings' => array(
+      'title' => t('Administer Livefyre module'),
+      'description' => t('Perform administration tasks for the Livefyre module.'),
     ),
     'access livefyre comments' => array(
       'title' => t('Access Livefyre comments'),
