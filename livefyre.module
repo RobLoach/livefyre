@@ -574,3 +574,25 @@ function livefyre_comment_sync() {
     }
   }
 }
+
+/**
+ * Returns with the Drupal entity ID from the livefyre comment ID.
+ *
+ * @param $lf_comment_id
+ *
+ * @return int|null
+ */
+function livefyre_get_lfcid_from_lf_comment_id($lf_comment_id) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'livefyre_comment')
+    ->propertyCondition('lf_comment_id', $lf_comment_id);
+
+  $result = $query->execute();
+
+  if (isset($result['livefyre_comment'])) {
+    $lfcids = array_keys($result['livefyre_comment']);
+    return current($lfcids);
+  }
+
+  return NULL;
+}
