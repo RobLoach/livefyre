@@ -377,6 +377,7 @@ function livefyre_build_conv($article_id, $title) {
   $source_url = $base_url . '/' . current_path();
   $network = variable_get('livefyre_network', 'livefyre.com');
   $network_key = variable_get('livefyre_network_key', NULL);
+  $delegate = livefyre_get_delegates();
 
   // Define Livefyre API variables
   $domain = new Livefyre_Domain($network, $network_key);
@@ -384,7 +385,7 @@ function livefyre_build_conv($article_id, $title) {
   $article = $site->article($article_id, $source_url, $title);
   $conv = $article->conversation();
 
-  if (livefyre_is_enterprise()) {
+  if (livefyre_is_enterprise() && !$delegate) {
     // Authenticate the user.
     livefyre_user_authentication();
   }
@@ -399,16 +400,21 @@ function livefyre_build_conv($article_id, $title) {
  *   The delta letting us know we're in Livefyre Land.
  */
 function livefyre_add_footer($src) {
-  // Check for Janrain implementation
-  $global_push = "if (typeof LivefyreDrupal == 'undefined') {
+  // Add a default delegate if we hasn't set it yet.
+  $delegates = livefyre_get_delegates();
+  if (livefyre_is_enterprise() && !$delegates) {
+    $authDelegate = "var authDelegate = new fyre.conv.RemoteAuthDelegate();";
+    $src = "{$authDelegate}\n{$src}";
+  }
+
+  $src .= "\nif (typeof LivefyreDrupal == 'undefined') {
       window.LivefyreDrupal = new Array();\n} LivefyreDrupal.push(lf_config);";
-  if (livefyre_is_enterprise()) {
-    $src = "var authDelegate = new fyre.conv.RemoteAuthDelegate();\n{$src}";
-  }
-  $src .= "\n" . $global_push;
+
+  // Check for Janrain implementation
   if (variable_get('livefyre_jr_capture')) {
-    $src = "function livefyreJanrainInit(){\n" . $src . "}";
+    $src = "function livefyreJanrainInit(){\n{$src}}";
   }
+
   drupal_add_js('' . $src,
     array(
       'type' => 'inline',
@@ -604,6 +610,21 @@ function livefyre_user_authentication() {
  */
 function livefyre_is_enterprise() {
   return (variable_get('livefyre_network', 'livefyre.com') != 'livefyre.com');
+}
+
+/**
+ * Check if there is any custom delegates has saved.
+ *
+ * @return string|bool
+ *  Delegate functions.
+ */
+function livefyre_get_delegates() {
+  $delegate = variable_get('livefyre_auth_delegate', '');
+  if (!empty($delegate)) {
+    return $delegate;
+  }
+
+  return FALSE;
 }
 
 /**
