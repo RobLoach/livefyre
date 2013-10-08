@@ -403,7 +403,7 @@ function livefyre_add_footer($src) {
   // Add a default delegate if we hasn't set it yet.
   $delegates = livefyre_get_delegates();
   if (livefyre_is_enterprise() && !$delegates) {
-    $authDelegate = "var authDelegate = new fyre.conv.RemoteAuthDelegate();";
+    $authDelegate = "window.authDelegate = new fyre.conv.RemoteAuthDelegate();";
     $src = "{$authDelegate}\n{$src}";
   }
 
