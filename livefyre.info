@@ -1,5 +1,5 @@
-name = Livefyre comments 3
-description = Implement Livefyre Comments 3 on your Drupal Site.
+name = Livefyre comments
+description = Implement Livefyre Comments on your Drupal Site.
 core = 7.x
 
 configure = admin/config/content/livefyre
