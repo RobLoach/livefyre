@@ -16,8 +16,8 @@ $form['livefyre_network_key'] = array(
   '#type' => 'textfield',
   '#title' => t('Livefyre Network Key'),
   '#default_value' => variable_get('livefyre_network_key'),
-  '#description' => t("Livefyre Network Key. Do not change unless on a custom network."),
-  '#required' => TRUE,
+  '#description' => t("Livefyre Network Key. Do not change unless on a custom network. <strong>Only for ENTERPRISE users</strong>."),
+  '#required' => FALSE,
 );
 
 $form['livefyre_auth_delegate'] = array(
