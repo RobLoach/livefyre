@@ -1,0 +1,14 @@
+{
+    "name": "drupal/livefyre",
+    "description": "Livefyre Drupal module.",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Rob Loach",
+            "email": "robloach@gmail.com"
+        }
+    ],
+    "require": {
+        "livefyre/livefyre-php-utils": "2.0.4"
+    }
+}

@@ -7,56 +7,19 @@
 
   Drupal.behaviors.livefyreAuthentication = {
     attach: function (context, settings) {
-      // After the fyre.conv has created.
-      fyre.conv.ready(function() {
-        // Check that the livefyre.Usertoken is not null.
-        if (typeof settings.livefyre != 'undefined' && typeof settings.livefyre.userToken != 'undefined') {
-          // Authenticate the user with the given token.
-          fyre.conv.login(settings.livefyre.userToken);
-        }
-
-        /**
-         * Custom login handler.
-         * Redirect the user to the Drupal's login page, because enterprise
-         * users will login automatically to Livefyre system.
-         * @param handlers
-         */
-        authDelegate.login = function (handlers){
-          var param = {
-            q: 'user/login',
-            destination: settings.livefyre.destination
-          };
-          window.location = settings.basePath + '?' + $.param(param);
-        };
-
-        /**
-         * Custom logout handler.
-         * Log out the user from Liveyre system and also log out from the Drupal
-         * system.
-         * @param handlers
-         */
-        authDelegate.logout = function (handlers){
-          handlers.success();
-          var param = {
-            q: 'user/logout',
-            destination: settings.livefyre.destination
-          };
-          window.location = settings.basePath + '?' + $.param(param);
-        };
-
-        /**
-         * Custom edit profile handler.
-         * Redirect the user to the own Drupal user edit form.
-         * @param handlers
-         * @param author
-         */
-        authDelegate.editProfile = function(handlers, author) {
-          var param = {
-            q: 'user/' + settings.livefyre.uid + '/edit',
-            destination: settings.livefyre.destination
-          };
-          window.location = settings.basePath + '?' + $.param(param);
-        };
+      $('#livefyre', context).once('livefyre', function () {
+        $.getScript('//cdn.livefyre.com/Livefyre.js')
+          .done(function () {
+            // Then use Livefyre.require to add the App:
+            Livefyre.require(['fyre.conv#3'], function(Conv) {
+               new Conv(settings.livefyre.networkConfig, [settings.livefyre.convConfig], function(widget) {});
+            });
+          })
+          .fail(function (jqxhr, settings, exception) {
+            console.log(jqxhr);
+            console.log(settings);
+            console.log(exception);
+          });
       });
     }
   };
