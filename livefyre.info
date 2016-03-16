@@ -1,6 +1,7 @@
 name = Livefyre comments
 description = Implement Livefyre Comments on your Drupal Site.
 core = 7.x
+php = 5.5
 
 configure = admin/config/content/livefyre
 

@@ -4,10 +4,12 @@
  *  Display Livefyre comments.
  */
 
+use Livefyre\Livefyre;
+
 /**
  * Define the zor library Livefyre will pull down from.
  */
-define('LF_ZOR', 'http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js');
+define('LF_ZOR', '//cdn.livefyre.com/Livefyre.js');
 
 /**
  * Include the Livefyre API
@@ -69,7 +71,10 @@ function livefyre_permission() {
  * Sync livefyre comment with the created entities.
  */
 function livefyre_cron() {
-  livefyre_comment_sync();
+  /**
+   * @todo Update comment sync to new Livefyre API
+   */
+  //livefyre_comment_sync();
 }
 
 /**
@@ -293,6 +298,26 @@ function livefyre_entity_info() {
  * Renders livefyre field's full formatter.
  */
 function theme_livefyre_formatter_full(&$variables) {
+  $collection = livefyre_build_conv($variables['article_id'], $variables['title']);
+  $settings = array(
+    'networkConv' =>  array(
+      'network' => variable_get('livefyre_network', 'client-solutions.fyre.co'),
+    ),
+    'convConfig' => array(
+      'siteId' => variable_get('livefyre_site_id'),
+      'articleId' => $variables['article_id'],
+      'el' => 'livecomments',
+      'collectionMeta' => $collection->buildCollectionMetaToken(),
+      'checksum' => $collection->buildChecksum(),
+    )
+  );
+  drupal_add_js(array('livefyre' => $settings), 'setting');
+
+  return '<div id="livefyre" class="' . $variables['widget_id'] . '"></div>';
+
+  /**
+   * @todo Update auth to the new Livefyre API
+
   // Custom delegate object if this is and enterprise customer.
   $delegate = livefyre_is_enterprise() ? 'authDelegate' : '';
 
@@ -311,12 +336,15 @@ function theme_livefyre_formatter_full(&$variables) {
   // Return with the id. If the bootstrap exists it will contain the generated
   // html data too for search engines.
   return $out;
+  */
 }
 
 /**
  * Renders livefyre comments number field formatter.
  */
 function theme_livefyre_formatter_comments_number(&$variables) {
+  /**
+   * @todo Update to the new Livefyre API
   $network = variable_get('livefyre_network', 'livefyre.com');
   drupal_add_js("http://zor.{$network}/wjs/v1.0/javascripts/CommentCount.js", 'external');
   $out = '<span class="livefyre-commentcount" data-lf-site-id="' . $variables['site_id'] . '" data-lf-article-id="' . $variables['article_id'] . '">' .
@@ -324,6 +352,8 @@ function theme_livefyre_formatter_comments_number(&$variables) {
     . '</span>';
 
   return $out;
+   */
+  return '';
 }
 
 /**
@@ -372,11 +402,27 @@ function livefyre_get_bootstrapped_data($article_id, $prefix = '<div id="livefyr
 function livefyre_build_conv($article_id, $title) {
   global $base_url;
 
+  require_once __DIR__ . '/vendor/autoload.php';
+
   $site_id = variable_get('livefyre_site_id');
   $site_key = variable_get('livefyre_site_key');
   $source_url = $base_url . '/' . current_path();
   $network = variable_get('livefyre_network', 'livefyre.com');
   $network_key = variable_get('livefyre_network_key', NULL);
+
+  $network = Livefyre::getNetwork($network, $network_key);
+  $site = $network->getSite($site_id, $site_key);
+  $collection = $site->buildCommentsCollection($title, $article_id, $source_url);
+
+  /**
+   * @todo Figure out what to do with Tags
+   */
+  //$collection->getData()->setTags("tags");
+
+  return $collection;
+
+  /**
+   * @todo Find out what to do with delegates and auth
   $delegate = livefyre_get_delegates();
 
   // Define Livefyre API variables
@@ -391,6 +437,7 @@ function livefyre_build_conv($article_id, $title) {
   }
 
   return $conv;
+  */
 }
 
 /**
@@ -401,6 +448,8 @@ function livefyre_build_conv($article_id, $title) {
  */
 function livefyre_add_footer($src) {
   // Add a default delegate if we hasn't set it yet.
+  /**
+   * @todo Move auth code to the new API.
   $delegates = livefyre_get_delegates();
   if (livefyre_is_enterprise() && !$delegates) {
     $authDelegate = "window.authDelegate = new fyre.conv.RemoteAuthDelegate();";
@@ -422,6 +471,7 @@ function livefyre_add_footer($src) {
       'weight' => -90,
     )
   );
+  */
 }
 
 /**
@@ -432,9 +482,6 @@ function livefyre_page_setup() {
   // Build the Livefyre zor URL
   $livefyre_zor = LF_ZOR;
   $lf_network = variable_get('livefyre_network', 'livefyre.com');
-  if (variable_get('livefyre_environment') != 1) {
-    $livefyre_zor = "http://zor." . $lf_network . "/wjs/v3.0/javascripts/livefyre.js";
-  }
 
   // Add the external javascript to the page
   drupal_add_js($livefyre_zor,
@@ -456,6 +503,8 @@ function livefyre_page_setup() {
  * Gets the comments form livefyre server and stores them as Drupal comments.
  */
 function livefyre_comment_sync() {
+  /**
+   * @todo Move Comment Sync to the new Livefyre API.
   $lf_network = variable_get('livefyre_network', 'livefyre.com');
   $lf_site_id = variable_get('livefyre_site_id');
   $lf_site_key = variable_get('livefyre_site_key');
@@ -549,6 +598,7 @@ function livefyre_comment_sync() {
       entity_save('livefyre_comment', $comment);
     }
   }
+  */
 }
 
 /**
